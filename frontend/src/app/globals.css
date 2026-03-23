@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root, .theme-dark {
+  --bg-start: #1f1b2e;
+  --bg-end: #0d1117;
+  --glass: rgba(30, 35, 45, 0.7);
+  --border-glass: rgba(255, 255, 255, 0.1);
+  --text-main: #f8fafc;
+  --text-title: #ffffff;
+  --text-muted: #94a3b8;
+  --code-bg: rgba(0,0,0,0.3);
+}
+
+.theme-lightwhite {
+  --bg-start: #f1f5f9;
+  --bg-end: #ffffff;
+  --glass: rgba(255, 255, 255, 0.85);
+  --border-glass: rgba(0, 0, 0, 0.15);
+  --text-main: #1e293b;
+  --text-title: #0f172a;
+  --text-muted: #64748b;
+  --code-bg: rgba(0,0,0,0.05);
+}
+
+.theme-lightgreen {
+  --bg-start: #ecfdf5;
+  --bg-end: #d1fae5;
+  --glass: rgba(255, 255, 255, 0.8);
+  --border-glass: rgba(16, 185, 129, 0.3);
+  --text-main: #064e3b;
+  --text-title: #022c22;
+  --text-muted: #047857;
+  --code-bg: rgba(255,255,255,0.5);
+}
+
+body {
+  background: radial-gradient(circle at top right, var(--bg-start), var(--bg-end));
+  background-attachment: fixed;
+  color: var(--text-main);
+  min-height: 100vh;
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+.text-color-main { color: var(--text-main); }
+.text-color-title { color: var(--text-title); }
+.text-color-muted { color: var(--text-muted); }
+.bg-glass { background: var(--glass); backdrop-filter: blur(16px); }
+.border-glass { border-color: var(--border-glass); }
+.bg-code { background: var(--code-bg); }
+
+/* Custom scrollbar for tables */
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.4);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.8);
+}
