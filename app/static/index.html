@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataAnalytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="theme-dark">
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <button onclick="setTheme('theme-dark')" class="btn-theme" title="Dark Mode" id="btn-dark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+        <button onclick="setTheme('theme-lightwhite')" class="btn-theme" title="Light Mode" id="btn-light">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+        <button onclick="setTheme('theme-lightgreen')" class="btn-theme" title="Green Mode" id="btn-green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </button>
+    </div>
+
+    <div class="glass-container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <h1>DataAnalytics</h1>
+            </div>
+            <p>Intelligent AI-powered data preprocessing</p>
+        </header>
+
+        <main>
+            <!-- Upload View -->
+            <div class="upload-section" id="uploadSection">
+                <form id="uploadForm">
+                    <div class="drop-zone" id="dropZone">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" class="zone-icon" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        <p>Drag & drop your CSV file here or <span class="browse">browse</span></p>
+                        <input type="file" id="fileInput" name="file" accept=".csv" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="targetCol">Target Column (Optional, preserved during prep)</label>
+                        <input type="text" id="targetCol" name="target_col" placeholder="e.g. price">
+                    </div>
+                    
+                    <button type="submit" id="submitBtn">
+                        <span>Preprocess Data ✨</span>
+                        <div class="loader-ring"></div>
+                    </button>
+                    <div id="errorMsg" class="error-message"></div>
+                </form>
+            </div>
+
+            <!-- Results View -->
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <div class="dashboard-header">
+                    <h2>Processing Complete</h2>
+                    <div class="status-badge" id="statusBadge">Success</div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-title">Quality Score</div>
+                        <div class="metric-value grade" id="metricScore">--</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Completeness</div>
+                        <div class="metric-value" id="metricCompleteness">--</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Shape Change</div>
+                        <div class="metric-value" id="metricShape">--</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Memory Saved</div>
+                        <div class="metric-value" id="metricMemory">--</div>
+                    </div>
+                </div>
+
+                <!-- Step by step breakdown -->
+                <div class="pipeline-flow">
+                    
+                    <div class="pipeline-step">
+                        <h3>1. Original Data Info & Missing Values</h3>
+                        <div class="info-grid" id="dataInfoBox"></div>
+                        <div class="table-container">
+                            <table id="tableRaw">
+                                <thead><tr><th colspan="100%">Raw Data Preview (df.head)</th></tr></thead>
+                                <tbody id="tbodyRaw"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="pipeline-step">
+                        <h3>2. Missing Value Imputation</h3>
+                        <div class="audit-card">
+                            <ul id="imputationLogList" class="audit-list"></ul>
+                        </div>
+                        <div class="table-container">
+                            <table id="tableImputed">
+                                <thead><tr><th colspan="100%">After Imputation (df.head)</th></tr></thead>
+                                <tbody id="tbodyImputed"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="pipeline-step">
+                        <h3>3. Categorical Encoding</h3>
+                        <div class="table-container">
+                            <table id="tableEncoded">
+                                <thead><tr><th colspan="100%">After Encoding (df.head)</th></tr></thead>
+                                <tbody id="tbodyEncoded"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="pipeline-step">
+                        <h3>4. Normalization / Scaling</h3>
+                        <div class="table-container">
+                            <table id="tableNormalized">
+                                <thead><tr><th colspan="100%">After Normalization (df.head)</th></tr></thead>
+                                <tbody id="tbodyNormalized"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="pipeline-step complete-audit">
+                        <h3>Complete Audit Log</h3>
+                        <div class="audit-card full-audit">
+                            <ul id="auditLogList" class="audit-list"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center pt-8 border-t border-glass">
+                    <button id="viewGraphsBtn" class="btn-secondary">
+                        📊 View Generated Graphs
+                    </button>
+                </div>
+            </div>
+
+            <!-- Graphs View -->
+            <div class="graphs-section" id="graphsSection" style="display: none;">
+                <div class="dashboard-header">
+                    <h2>Data Visualizations</h2>
+                    <button id="backToResultsBtn" class="btn-clear">← Back to Results</button>
+                </div>
+                
+                <div class="graphs-grid">
+                    <div class="graph-card">
+                        <h3>Correlation Heatmap</h3>
+                        <img id="imgHeatmap" alt="Heatmap" />
+                    </div>
+                    <div class="graph-card">
+                        <h3>Scatter Plot</h3>
+                        <img id="imgScatter" alt="Scatter" />
+                    </div>
+                    <div class="graph-card">
+                        <h3>Histogram & Density</h3>
+                        <img id="imgHistogram" alt="Histogram" />
+                    </div>
+                    <div class="graph-card">
+                        <h3>Bar Chart</h3>
+                        <img id="imgBar" alt="Bar Chart" />
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
