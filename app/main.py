@@ -24,7 +24,7 @@ import os
 
 
 load_dotenv()
-app = FastAPI(title="DataForge Pro", version="2.0.0")
+app = FastAPI(title="DataInsight AI", version="2.0.0")
 
 # CORS Configuration for Deployment
 allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")

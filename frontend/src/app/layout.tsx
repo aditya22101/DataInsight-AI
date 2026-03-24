@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DataForge Pro",
+  title: "DataInsight AI",
   description: "AI-Powered Data Preprocessing & Analytics Workspace",
 };
 
