@@ -1,5 +1,6 @@
 import io
 import os
+import sys
 import uuid
 import datetime
 import certifi
@@ -13,21 +14,25 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
-from app.agents.inspector_agent import InspectorAgent
-from app.agents.transform_agent import TransformAgent
-from app.agents.quality_agent import QualityAgent
-from app.agents.ai_agent import AIAgent
-from app.agents.visualization_agent import VisualizationAgent
-from app.agents.ml_agent import MLAgent
+from .agents.inspector_agent import InspectorAgent
+from .agents.transform_agent import TransformAgent
+from .agents.quality_agent import QualityAgent
+from .agents.ai_agent import AIAgent
+from .agents.visualization_agent import VisualizationAgent
+from .agents.ml_agent import MLAgent
 from pymongo import MongoClient
-import os
 
 
 load_dotenv()
+print("DEBUG: DataInsight AI is initializing...", file=sys.stderr)
 app = FastAPI(title="DataInsight AI", version="2.0.0")
 
 # CORS Configuration for Deployment
 allowed_origins_raw = os.getenv("ALLOWED_ORIGINS") or os.getenv("allowed_origins") or ""
+if allowed_origins_raw:
+    print(f"DEBUG: ALLOWED_ORIGINS detected.", file=sys.stderr)
+else:
+    print("DEBUG: ALLOWED_ORIGINS is empty, defaulting to '*'.", file=sys.stderr)
 allowed_origins = allowed_origins_raw.split(",") if allowed_origins_raw else ["*"]
 app.add_middleware(
     CORSMiddleware, 
@@ -38,6 +43,10 @@ app.add_middleware(
 )
 
 MONGODB_URL = os.getenv("MONGODB_URL") or os.getenv("mongodb_url")
+if MONGODB_URL:
+    print("DEBUG: MONGODB_URL detected.", file=sys.stderr)
+else:
+    print("DEBUG: MONGODB_URL NOT FOUND.", file=sys.stderr)
 
 if not MONGODB_URL:
     raise ValueError("MONGODB_URL is not set in Render environment variables")
