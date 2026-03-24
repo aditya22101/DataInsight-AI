@@ -27,7 +27,8 @@ load_dotenv()
 app = FastAPI(title="DataInsight AI", version="2.0.0")
 
 # CORS Configuration for Deployment
-allowed_origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
+allowed_origins_raw = os.getenv("ALLOWED_ORIGINS") or os.getenv("allowed_origins") or ""
+allowed_origins = allowed_origins_raw.split(",") if allowed_origins_raw else ["*"]
 app.add_middleware(
     CORSMiddleware, 
     allow_origins=allowed_origins, 
@@ -36,7 +37,7 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-MONGODB_URL = os.getenv("MONGODB_URL")
+MONGODB_URL = os.getenv("MONGODB_URL") or os.getenv("mongodb_url")
 
 if not MONGODB_URL:
     raise ValueError("MONGODB_URL is not set in Render environment variables")
