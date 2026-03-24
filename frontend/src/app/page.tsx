@@ -86,6 +86,8 @@ const initialCharts: ChartConfig[] = [
   { id: '4', type: 'line', xAxis: '', yAxis: '', color: '#ec4899', title: 'Trend Analysis' }
 ];
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:10000";
+
 export default function Dashboard() {
   const { isLoaded, isSignedIn, user } = useUser();
   const [file, setFile] = useState<File | null>(null);
@@ -139,7 +141,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (view === "history" && user?.primaryEmailAddress?.emailAddress) {
-      fetch(`http://localhost:8001/history/${user.primaryEmailAddress.emailAddress}`)
+      fetch(`${API_URL}/history/${user.primaryEmailAddress.emailAddress}`)
         .then(res => res.json())
         .then(data => setHistoryData(data))
         .catch(err => console.error("History Fetch Error:", err));
@@ -158,7 +160,7 @@ export default function Dashboard() {
       if (user?.id) formData.append("user_id", user.id);
       if (user?.primaryEmailAddress?.emailAddress) formData.append("user_email", user.primaryEmailAddress.emailAddress);
       
-      const res = await fetch("http://localhost:8001/preprocess", { method: "POST", body: formData });
+      const res = await fetch(`${API_URL}/preprocess`, { method: "POST", body: formData });
       clearInterval(interval);
       if (!res.ok) throw new Error((await res.json()).detail || "Processing failed");
       const data = await res.json();
@@ -179,7 +181,7 @@ export default function Dashboard() {
         user_id: user?.id,
         user_email: user?.primaryEmailAddress?.emailAddress
       };
-      const res = await fetch("http://localhost:8001/train", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      const res = await fetch(`${API_URL}/train`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       if (!res.ok) throw new Error((await res.json()).detail || "Training failed");
       setTrainResults(await res.json());
     } catch (err: any) { setTrainError(err.message); } finally { setTrainLoading(false); }
@@ -252,7 +254,7 @@ export default function Dashboard() {
               <div className="flex items-center gap-3">
                 {results && (
                   <button 
-                    onClick={() => window.open(`http://localhost:8001/export/${results.session_id}`, '_blank')}
+                    onClick={() => window.open(`${API_URL}/export/${results.session_id}`, '_blank')}
                     className="flex items-center gap-2 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 text-xs font-bold px-3 py-1.5 rounded-lg border border-emerald-500/30 transition-all shadow-lg"
                     title="Download Processed CSV"
                   >
