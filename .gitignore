@@ -1,0 +1,46 @@
+# =========================
+# ENV FILES (VERY IMPORTANT)
+# =========================
+.env
+.env.*
+frontend/.env.local
+backend/.env
+
+# =========================
+# NODE / FRONTEND
+# =========================
+node_modules/
+.next/
+dist/
+build/
+
+# =========================
+# PYTHON / BACKEND
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# =========================
+# LOGS
+# =========================
+*.log
+
+# =========================
+# OS FILES
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE FILES (optional)
+# =========================
+.vscode/
+.idea/
+
+.env
+test.csv
+check_mongo.py
