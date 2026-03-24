@@ -213,13 +213,4 @@ async def export_data(session_id: str):
         headers={"Content-Disposition": f"attachment; filename=dataforge_processed_{session_id}.csv"}
     )
 
-os.makedirs("app/static", exist_ok=True)
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
-@app.get("/")
-async def serve_frontend():
-    return FileResponse("app/static/index.html")
-
-@app.get("/{full_path:path}")
-async def serve_react_app(full_path: str):
-    return FileResponse("app/static/index.html")
