@@ -152,7 +152,7 @@ Advanced Analytics Dashboard
 ### 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/your-username/dataforge-pro.git
+git clone https://github.com/aditya22101/DataInsight-AI.git
 cd datainsight-ai
 
 ### 2️⃣ Backend Setup
